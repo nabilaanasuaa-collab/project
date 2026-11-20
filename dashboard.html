@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Pengaduan Masyarakat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-body">
+<aside class="sidebar">
+  <div class="sidebar-brand"><div class="brand-icon">P</div><h3>Pengaduan</h3></div>
+  <p class="menu-title">MENU UTAMA</p>
+  <a href="dashboard.html" class="menu active">▦ Dashboard</a>
+  <a href="#laporan" class="menu">▤ Data Pengaduan</a>
+  <a href="#statistik" class="menu">▥ Statistik</a>
+  <div class="sidebar-bottom"><a href="#" onclick="logout(event)" class="menu logout">↪ Keluar</a></div>
+</aside>
+<main class="main-content">
+  <header class="topbar">
+    <div><h2>Dashboard</h2><p>Selamat datang di sistem pengaduan masyarakat.</p></div>
+    <div class="admin-profile"><div class="profile-icon">A</div><div><strong>Administrator</strong><small>Admin</small></div></div>
+  </header>
+  <section class="welcome-card">
+    <div><h2>Halo, Administrator!</h2><p>Pantau dan kelola laporan pengaduan masyarakat melalui halaman ini.</p></div>
+    <div class="welcome-symbol">📋</div>
+  </section>
+  <section class="stats" id="statistik">
+    <div class="stat-card"><div class="stat-icon green">▤</div><p>Total Pengaduan</p><h2 id="total">4</h2><small>Seluruh laporan masuk</small></div>
+    <div class="stat-card"><div class="stat-icon orange">◷</div><p>Menunggu</p><h2 id="waiting-count">2</h2><small>Belum ditindaklanjuti</small></div>
+    <div class="stat-card"><div class="stat-icon blue">↻</div><p>Diproses</p><h2 id="process-count">1</h2><small>Sedang ditangani</small></div>
+    <div class="stat-card"><div class="stat-icon purple">✓</div><p>Selesai</p><h2 id="done-count">1</h2><small>Berhasil diselesaikan</small></div>
+  </section>
+  <section class="content-card" id="laporan">
+    <div class="section-heading">
+      <div><h3>Pengaduan Terbaru</h3><p>Daftar laporan yang disampaikan masyarakat</p></div>
+      <button onclick="tambahLaporan()" class="add-button">+ Tambah Laporan</button>
+    </div>
+    <div class="table-container">
+      <table>
+        <thead><tr><th>No</th><th>Nama Pelapor</th><th>Jenis Pengaduan</th><th>Tanggal</th><th>Status</th></tr></thead>
+        <tbody id="data-laporan">
+          <tr><td>01</td><td>Andi Saputra</td><td>Jalan Rusak</td><td>20/11/2026</td><td><span class="status waiting">Menunggu</span></td></tr>
+          <tr><td>02</td><td>Siti Rahma</td><td>Sampah Menumpuk</td><td>19/11/2026</td><td><span class="status process">Diproses</span></td></tr>
+          <tr><td>03</td><td>Budi Santoso</td><td>Saluran Air</td><td>18/11/2026</td><td><span class="status done">Selesai</span></td></tr>
+          <tr><td>04</td><td>Dewi Lestari</td><td>Lampu Jalan Mati</td><td>17/11/2026</td><td><span class="status waiting">Menunggu</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <footer class="footer">© 2026 Sistem Pengaduan Masyarakat</footer>
+</main>
+<script>
+if (sessionStorage.getItem("pengaduanLogin") !== "true") {
+  window.location.replace("login.html");
+}
+function logout(event) {
+  event.preventDefault();
+  sessionStorage.removeItem("pengaduanLogin");
+  window.location.href = "login.html";
+}
+function updateCounts() {
+  const rows = [...document.querySelectorAll("#data-laporan tr")];
+  const counts = { "Menunggu": 0, "Diproses": 0, "Selesai": 0 };
+  rows.forEach(row => {
+    const status = row.querySelector(".status")?.textContent.trim();
+    if (counts[status] !== undefined) counts[status]++;
+  });
+  document.getElementById("total").textContent = rows.length;
+  document.getElementById("waiting-count").textContent = counts["Menunggu"];
+  document.getElementById("process-count").textContent = counts["Diproses"];
+  document.getElementById("done-count").textContent = counts["Selesai"];
+}
+function tambahLaporan() {
+  const nama = prompt("Masukkan nama pelapor:");
+  if (!nama || !nama.trim()) return;
+  const jenis = prompt("Masukkan jenis pengaduan:");
+  if (!jenis || !jenis.trim()) return;
+  const tanggal = new Date().toLocaleDateString("id-ID");
+  const tbody = document.getElementById("data-laporan");
+  const row = document.createElement("tr");
+  const values = [String(tbody.rows.length + 1).padStart(2, "0"), nama.trim(), jenis.trim(), tanggal];
+  values.forEach(value => {
+    const cell = document.createElement("td");
+    cell.textContent = value;
+    row.appendChild(cell);
+  });
+  const statusCell = document.createElement("td");
+  const badge = document.createElement("span");
+  badge.className = "status waiting";
+  badge.textContent = "Menunggu";
+  statusCell.appendChild(badge);
+  row.appendChild(statusCell);
+  tbody.appendChild(row);
+  updateCounts();
+}
+updateCounts();
+</script>
+</body>
+</html>

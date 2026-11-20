@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Pengaduan Masyarakat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+<div class="login-container">
+  <section class="login-left">
+    <div class="brand"><div class="brand-icon">P</div><h2>Pengaduan Masyarakat</h2></div>
+    <div class="welcome">
+      <h1>Sampaikan Aspirasi Anda</h1>
+      <p>Kami hadir untuk membantu masyarakat menyampaikan laporan dan pengaduan dengan mudah, cepat, dan transparan.</p>
+    </div>
+    <div class="login-footer">© 2026 Pengaduan Masyarakat</div>
+  </section>
+  <section class="login-right">
+    <div class="login-form">
+      <h2>Selamat Datang!</h2>
+      <p class="subtitle">Silakan masuk ke akun Anda</p>
+      <form onsubmit="login(event)">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Masukkan email Anda" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Masukkan password" required>
+        <button type="submit" class="login-button">Masuk</button>
+      </form>
+      <p class="login-note">Belum mempunyai akun? <a href="mailto:admin@pengaduan.local">Hubungi admin</a></p>
+    </div>
+  </section>
+</div>
+<script>
+function login(event) {
+  event.preventDefault();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  if (email === "admin@gmail.com" && password === "admin123") {
+    sessionStorage.setItem("pengaduanLogin", "true");
+    window.location.href = "dashboard.html";
+  } else {
+    alert("Email atau password salah!");
+  }
+}
+</script>
+</body>
+</html>
